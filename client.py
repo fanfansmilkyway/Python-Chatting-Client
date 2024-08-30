@@ -1,3 +1,6 @@
+__version__ = "DEV1.0"
+print(f"Version: {__version__}")
+
 import socket
 import sys
 import time
@@ -5,9 +8,12 @@ import signal
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-ip', '--server_ip', default="20.189.75.209", type=str, help="Sever IP Address")
-parser.add_argument('-port', '--server_port', default=8080, type=int, help="The port where service running on")
+parser.add_argument('-ip', '--server_ip',
+                    default="20.189.75.209", type=str, help="Sever IP Address")
+parser.add_argument('-port', '--server_port', default=8080,
+                    type=int, help="The port where service running on")
 arguments = parser.parse_args()
+
 
 def sigint_handler(signal, frame):
     print()
@@ -15,6 +21,8 @@ def sigint_handler(signal, frame):
     disconnect()
     print(GREEN, "Successfully disconnected from the server.")
     sys.exit(0)
+
+
 signal.signal(signal.SIGINT, sigint_handler)
 
 # Colors
@@ -40,6 +48,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 def disconnect(action=DISCONNECT_MESSAGE):
     client.send(action.encode(FORMAT))
 
+
 def send_msg(message: str, target: str, action="SEND"):
     action = action.encode(FORMAT)
     message = message.encode(FORMAT)
@@ -50,16 +59,16 @@ def send_msg(message: str, target: str, action="SEND"):
     time.sleep(0.1)
     client.send(_target)
     status = int(client.recv(2).decode(FORMAT))
-    if status == -1: # Target Username Not Found
+    if status == -1:  # Target Username Not Found
         print(RED, f"\nTarget Not Found. {target}: No such username.")
-    if status == 0: # Send Successfully
+    if status == 0:  # Send Successfully
         return
 
-def receive_msg(action="RECV"):
+def receive_msg(target="!ALL", action="RECV"):
     action = action.encode(FORMAT)
     client.send(action)
-    NumberOfMessage = int(client.recv(256).decode(FORMAT))  # The number of messages
-    print(NumberOfMessage)
+    NumberOfMessage = int(client.recv(256).decode(FORMAT)
+                          )  # The number of messages
     messages_receive = []
     if NumberOfMessage == 0:
         pass
@@ -72,32 +81,45 @@ def receive_msg(action="RECV"):
 
 # Modes
 
+# Both Send and Receive
 def email_mode():
     while True:
-            message_send = str(input(NORMAL + "Message: "))
-            target = str(input(NORMAL + "Target: "))
-            send_msg(message=message_send, target=target)
-            time.sleep(0.25)
-            messages_receive = receive_msg()
-            if messages_receive == -1: # Target Username Not Found
-                print(RED, "Target Username Not Found")
-                time.sleep(1)
-                continue
-            print(messages_receive)
-            if messages_receive == None:
-                print(YELLOW + "No message receive.")
-            if messages_receive != None:
-                for message, message_from in messages_receive:
-                    print(message_from + " 👉🏻 " + message)
-
-def receiving_mode():
-    try:
-        while True:
-            receive_msg()
+        message_send = str(input(NORMAL + "Message: "))
+        target = str(input(NORMAL + "Target: "))
+        send_msg(message=message_send, target=target)
+        time.sleep(0.25)
+        messages_receive = receive_msg()
+        if messages_receive == -1:  # Target Username Not Found
+            print(RED, "Target Username Not Found")
             time.sleep(1)
-    except:
-        send_msg(message=DISCONNECT_MESSAGE, target="!SERVER")
+            continue
+        if messages_receive == None:
+            print(YELLOW + "No message receive.")
+        if messages_receive != None:
+            for message, message_from in messages_receive:
+                print(NORMAL, message_from + " 👉🏻 " + message)
 
+# Receive Only
+def receiving_mode():
+    print(YELLOW, "Receiving...")
+    while True:
+        messages_receive = receive_msg()
+        if messages_receive != None:
+            for message, message_from in messages_receive:
+                print(NORMAL, message_from + " 👉🏻 " + message)
+        time.sleep(1)
+
+# Send Only
+def sending_mode(personal=True):
+    print()
+    if personal:
+        target = input(f"{YELLOW}Which user do you want to personally chat with: ")
+    while True:
+        message_send = input(f"{NORMAL}Message: ")
+        if personal == False:
+            target = input(f"{NORMAL}Target: ")
+        send_msg(message_send, target)
+        time.sleep(1)
 
 # Officially connecting to the server.
 try:
@@ -107,7 +129,8 @@ except:
     exit()
 else:
     try:
-        verify_code = client.recv(len("HereIsPythonChattingService")).decode(FORMAT)
+        verify_code = client.recv(
+            len("HereIsPythonChattingService")).decode(FORMAT)
     except:
         print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
         exit()
@@ -118,11 +141,12 @@ else:
     time.sleep(0.5)
 
 # Ask username
-username = str(input(NORMAL + "Input your username: ")).encode(FORMAT)
+username = str(input(NORMAL + "Type in your username: ")).encode(FORMAT)
 client.send(username)
 
+# Ask mode
 print(YELLOW, "Welcome to Terminal Chatting. Choose the mode before you start:")
-print(YELLOW, "1: Email Mode       2: Receiving Mode")
+print(YELLOW, "1: Email Mode       2: Receiving Mode       3: Sending Mode")
 print()
 mode = input(f"{ORANGE} Type in which mode do you prefer?  ")
 
@@ -130,3 +154,10 @@ if mode == "1":
     email_mode()
 if mode == "2":
     receiving_mode()
+if mode == "3":
+    print(YELLOW, "1.Personal Chat       2.Email Chat")
+    send_mode = input(f"{ORANGE}Type in which sending mode do you prefer?  ")
+    if send_mode == "1":
+        sending_mode(personal=True)
+    if send_mode == "2":
+        sending_mode(personal=False)
