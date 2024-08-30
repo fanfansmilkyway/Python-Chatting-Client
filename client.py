@@ -2,6 +2,12 @@ import socket
 import sys
 import time
 import signal
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-ip', '--server_ip', default="20.189.75.209", type=str, help="Sever IP Address")
+parser.add_argument('-port', '--server_port', default=8080, type=int, help="The port where service running on")
+arguments = parser.parse_args()
 
 def sigint_handler(signal, frame):
     print()
@@ -22,12 +28,11 @@ YELLOW = '\033[93m'
 PINK = '\033[95m'
 
 HEADER = 64
-PORT = 8080
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "DISC"
 # Whatever IP address you found from running ifconfig in terminal.
-SERVER = "20.189.75.209"
-#SERVER = "127.0.0.1"
+SERVER = arguments.server_ip
+PORT = arguments.server_port
 
 ADDR = (SERVER, PORT)
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -101,6 +106,14 @@ except:
     print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
     exit()
 else:
+    try:
+        verify_code = client.recv(len("HereIsPythonChattingService")).decode(FORMAT)
+    except:
+        print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
+        exit()
+    if verify_code != "HereIsPythonChattingService":
+        print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
+        exit()
     print(GREEN, "[SERVER CONNECTED] Successfully connect to the server!")
     time.sleep(0.5)
 
