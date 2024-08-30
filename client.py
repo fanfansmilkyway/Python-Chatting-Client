@@ -1,5 +1,4 @@
-__version__ = "DEV1.0"
-print(f"Version: {__version__}")
+# Python 3.12.3
 
 import socket
 import sys
@@ -34,6 +33,9 @@ BLUE = '\033[34m'
 PURPLE = '\033[35m'
 YELLOW = '\033[93m'
 PINK = '\033[95m'
+
+__version__ = "DEV1.0.1"
+print(NORMAL, f"Version: {__version__}")
 
 HEADER = 64
 FORMAT = 'utf-8'
@@ -128,15 +130,6 @@ except:
     print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
     exit()
 else:
-    try:
-        verify_code = client.recv(
-            len("HereIsPythonChattingService")).decode(FORMAT)
-    except:
-        print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
-        exit()
-    if verify_code != "HereIsPythonChattingService":
-        print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
-        exit()
     print(GREEN, "[SERVER CONNECTED] Successfully connect to the server!")
     time.sleep(0.5)
 
