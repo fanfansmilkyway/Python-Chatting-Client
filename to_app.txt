@@ -1,0 +1,2 @@
+# This command can be used both on Windows(exe) and MacOS(app)
+python3 -m PyInstaller client.py --onefile
