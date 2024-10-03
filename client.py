@@ -149,7 +149,7 @@ else:
         print(GREEN, "[SERVER CONNECTED] Successfully connect to the server!")
         time.sleep(0.5)
 
-# Ask username
+# Ask Username
 username = str(input(NORMAL + "Type in your username: ")).encode(FORMAT)
 client.send(username)
 
