@@ -33,20 +33,20 @@ jobs:
         run: |
           # Set the deployment target to an older macOS version for compatibility
           export MACOSX_DEPLOYMENT_TARGET=10.13  # Set the target to an older version of macOS
-          pyinstaller --onefile --windowed --name Python-Chatting client.py
+          pyinstaller --onefile --windowed client.py
 
       - name: Package for macOS
         if: matrix.os == 'macos-latest'
         run: |
           mkdir -p dist/macos
-          mv dist/Python-Chatting.app dist/macos/Python-Chatting.app
+          mv dist/client.app dist/macos/Python-Chatting.app
 
       - name: Build executable for Windows
         if: matrix.os == 'windows-latest'
         run: |
-          pyinstaller --onefile --windowed --name Python-Chatting client.py
+          pyinstaller --onefile --windowed client.py
           mkdir -p dist/windows
-          mv dist/Python-Chatting.exe dist/windows/Python-Chatting.exe
+          mv dist/client.exe dist/windows/Python-Chatting.exe
 
       - name: Upload build artifacts (macOS)
         if: matrix.os == 'macos-latest'
@@ -75,8 +75,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}  # This uses the tag that triggered the workflow
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}  # This uses the tag that triggered the workflow
+          release_name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
 

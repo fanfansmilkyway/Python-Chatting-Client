@@ -16,7 +16,7 @@ arguments = parser.parse_args()
 
 def sigint_handler(signal, frame):
     print()
-    print(PINK, 'Interrupted')
+    print(PINK, 'Interrupted.')
     disconnect()
     print(GREEN, "Successfully disconnected from the server.")
     sys.exit(0)
