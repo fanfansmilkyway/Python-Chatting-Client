@@ -22,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'  # Specify Python version you need
+          python-version: '3.12.3'  # Specify Python version you need
 
       - name: Install dependencies
         run: |
@@ -37,13 +37,13 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: |
           mkdir -p dist/macos
-          mv dist/main dist/macos/Python-Chatting.app  # Rename the .app file appropriately
+          mv dist/client dist/macos/Python-Chatting.app  # Rename the .app file appropriately
           
       - name: Package for Windows
         if: matrix.os == 'windows-latest'
         run: |
           mkdir -p dist/windows
-          mv dist/main.exe dist/windows/Python-Chatting.exe  # Rename the .exe file appropriately
+          mv dist/client.exe dist/windows/Python-Chatting.exe  # Rename the .exe file appropriately
 
       - name: Upload package as artifact
         uses: actions/upload-artifact@v3
