@@ -34,12 +34,13 @@ PURPLE = '\033[35m'
 YELLOW = '\033[93m'
 PINK = '\033[95m'
 
-__version__ = "DEV1.0.1"
+__version__ = "DEV1.0.2"
 print(NORMAL, f"Version: {__version__}")
 
 HEADER = 64
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "DISC"
+CONFIRM_CONNECTION_MESSAGE = "CONFIRM_CONNECTION!"
 # Whatever IP address you found from running ifconfig in terminal.
 SERVER = arguments.server_ip
 PORT = arguments.server_port
@@ -49,7 +50,6 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 def disconnect(action=DISCONNECT_MESSAGE):
     client.send(action.encode(FORMAT))
-
 
 def send_msg(message: str, target: str, action="SEND"):
     action = action.encode(FORMAT)
@@ -123,15 +123,31 @@ def sending_mode(personal=True):
         send_msg(message_send, target)
         time.sleep(1)
 
+def confirm_connection():
+    client.settimeout(3.0)
+    try:
+        confirm_message = client.recv(len(CONFIRM_CONNECTION_MESSAGE)).decode(FORMAT)
+    except socket.timeout:
+        return False
+    if confirm_message == CONFIRM_CONNECTION_MESSAGE:
+        return True
+    if confirm_message != CONFIRM_CONNECTION_MESSAGE:
+        return False
+
 # Officially connecting to the server.
 try:
+    print(NORMAL, f"Server:{SERVER}, Port:{PORT}")
     client.connect(ADDR)
 except:
     print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
     exit()
 else:
-    print(GREEN, "[SERVER CONNECTED] Successfully connect to the server!")
-    time.sleep(0.5)
+    if confirm_connection() == False:
+        print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
+        exit()
+    if confirm_connection() == True:
+        print(GREEN, "[SERVER CONNECTED] Successfully connect to the server!")
+        time.sleep(0.5)
 
 # Ask username
 username = str(input(NORMAL + "Type in your username: ")).encode(FORMAT)
