@@ -34,6 +34,10 @@ jobs:
           # Set the deployment target to an older macOS version for compatibility
           export MACOSX_DEPLOYMENT_TARGET=10.13  # Set the target to an older version of macOS
           pyinstaller --onefile --windowed client.py
+      
+      - name: List dist directory (for debugging)
+        if: matrix.os == 'macos-latest'
+          run: ls -R dist/
 
       - name: Package for macOS
         if: matrix.os == 'macos-latest'
