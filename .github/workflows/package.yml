@@ -1,0 +1,52 @@
+name: Build Executables for macOS and Windows
+
+on:
+  push:
+    branches:
+      - release
+  pull_request:
+    branches:
+      - release
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'  # Specify Python version you need
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Install dependencies, including PyInstaller
+
+      - name: Build executable
+        run: |
+          pyinstaller --onefile --windowed client.py  # Replace main.py with your entry point script
+
+      - name: Package for macOS
+        if: matrix.os == 'macos-latest'
+        run: |
+          mkdir -p dist/macos
+          mv dist/main dist/macos/Python-Chatting.app  # Rename the .app file appropriately
+          
+      - name: Package for Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir -p dist/windows
+          mv dist/main.exe dist/windows/Python-Chatting.exe  # Rename the .exe file appropriately
+
+      - name: Upload package as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: packaged-${{ matrix.os }}
+          path: dist/*
