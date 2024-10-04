@@ -102,7 +102,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/macos/Python-Chatting.zip
+          asset_path: dist/macos/Python-Chatting-MacOS.zip
           asset_name: Python-Chatting.zip
           asset_content_type: application/zip
 
