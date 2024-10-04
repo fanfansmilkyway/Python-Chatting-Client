@@ -91,7 +91,7 @@ jobs:
           path: dist/macos/Python-Chatting.app
 
       - name: Zip the macOS app
-        run: zip -r Python-Chatting.zip ./dist/macos/Python-Chatting.app
+        run: zip -r dist/macos/Python-Chatting.zip dist/macos/Python-Chatting.app
 
       - name: List dist directory for debugging
         run: ls -R ./dist/macos
