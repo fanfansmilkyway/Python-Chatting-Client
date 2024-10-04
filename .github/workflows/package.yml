@@ -90,10 +90,11 @@ jobs:
           name: macOS-python-chatting
           path: dist/macos/Python-Chatting.app
 
-      - name: List dist before release (for debugging)
-        if: matrix.os == 'macos-latest'
-        run: |
-          ls -R dist/
+      - name: Zip the macOS app
+        run: zip -r Python-Chatting.zip ./dist/macos/Python-Chatting.app
+
+      - name: List dist directory for debugging
+        run: ls -R ./dist/macos
 
       - name: Upload macOS app to Release
         uses: actions/upload-release-asset@v1
@@ -101,9 +102,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/macos/Python-Chatting.app
-          asset_name: Python-Chatting.app
-          asset_content_type: application/octet-stream
+          asset_path: dist/macos/Python-Chatting.zip
+          asset_name: Python-Chatting.zip
+          asset_content_type: application/zip
 
       - name: Download Windows build artifact
         uses: actions/download-artifact@v3
