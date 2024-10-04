@@ -34,7 +34,7 @@ PURPLE = '\033[35m'
 YELLOW = '\033[93m'
 PINK = '\033[95m'
 
-__version__ = "DEV1.0.2"
+__version__ = "DEV1.0.21"
 print(NORMAL, f"Version: {__version__}")
 
 HEADER = 64

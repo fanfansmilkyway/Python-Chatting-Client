@@ -34,7 +34,7 @@ jobs:
           # Set the deployment target to an older macOS version for compatibility
           export MACOSX_DEPLOYMENT_TARGET=10.13  # Set the target to an older version of macOS
           pyinstaller --onefile --windowed client.py
-          
+
       - name: List dist after build (for debugging)
         if: matrix.os == 'macos-latest'
         run: |
@@ -53,12 +53,11 @@ jobs:
           mkdir -p dist/windows
           mv dist/client.exe dist/windows/Python-Chatting.exe
 
-      - name: Upload build artifacts (macOS)
-        if: matrix.os == 'macos-latest'
+      - name: Upload macOS build artifact
         uses: actions/upload-artifact@v3
         with:
-          name: macOS-python-chatting
-          path: dist/macos/*
+          name: macOS-python-chatting  # Name of the artifact
+          path: dist/macos/Python-Chatting.app  # Path to the artifact
 
       - name: Upload build artifacts (Windows)
         if: matrix.os == 'windows-latest'
@@ -89,6 +88,11 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: macOS-python-chatting
+
+      - name: List dist before release (for debugging)
+        if: matrix.os == 'macos-latest'
+        run: |
+          ls -R dist/
 
       - name: Upload macOS app to Release
         uses: actions/upload-release-asset@v1
