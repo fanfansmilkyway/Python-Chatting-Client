@@ -110,7 +110,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: windows-python-chatting
-          path: dist/macos/Python-Chatting-Windows.exe
+          path: dist/windows/Python-Chatting-Windows.exe
 
       - name: Upload Windows exe to Release
         uses: actions/upload-release-asset@v1
