@@ -164,7 +164,7 @@ if mode == "1":
 if mode == "2":
     receiving_mode()
 if mode == "3":
-    print(YELLOW, "1.Personal Chat       2.Email Chat")
+    print(YELLOW, "1.Personal Chat      2.Email Chat")
     send_mode = input(f"{ORANGE}Type in which sending mode do you prefer?  ")
     if send_mode == "1":
         sending_mode(personal=True)
