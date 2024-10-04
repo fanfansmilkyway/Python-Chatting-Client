@@ -88,6 +88,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: macOS-python-chatting
+        path: dist/macos/Python-Chatting.app
 
       - name: List dist before release (for debugging)
         if: matrix.os == 'macos-latest'
