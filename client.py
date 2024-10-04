@@ -1,7 +1,7 @@
 # Python 3.12.3
 
 import socket
-import sys
+import sys 
 import time
 import signal
 import argparse
@@ -140,11 +140,11 @@ try:
     client.connect(ADDR)
 except:
     print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
-    exit()
+    sys.exit()
 else:
     if confirm_connection() == False:
         print(RED, "[ERROR] Cannot connect to the server.\nPlease check the server status or your network.\nIf you still can't connect to the server, please contact us with fanfansmilkyway@gmail.com")
-        exit()
+        sys.exit()
     if confirm_connection() == True:
         print(GREEN, "[SERVER CONNECTED] Successfully connect to the server!")
         time.sleep(0.5)
