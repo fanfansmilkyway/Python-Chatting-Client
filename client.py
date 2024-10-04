@@ -18,7 +18,7 @@ def sigint_handler(signal, frame):
     print()
     print(PINK, 'Interrupted.')
     disconnect()
-    print(GREEN, "Successfully disconnected from the server!")
+    print(GREEN, "Successfully Disconnected from the server!")
     sys.exit(0)
 
 
